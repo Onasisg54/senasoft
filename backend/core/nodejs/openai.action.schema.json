@@ -1,0 +1,248 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "SENASoft Metrics API",
+    "version": "1.0.0"
+  },
+  "servers": [
+    { "url": "http://localhost:8080" },
+    { "url": "https://senasoft-core-dev-h2erabc0hhbcg7ee.eastus2-01.azurewebsites.net" }
+  ],
+  "paths": {
+    "/metrics/scalar": {
+      "get": {
+        "operationId": "getScalarData",
+        "summary": "Obtener métricas escalares de SENASoft",
+        "responses": {
+          "200": {
+            "description": "Lista de métricas",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": true,
+                    "properties": {
+                      "description": { "type": "string" },
+                      "value": { "type": ["number", "string", "null"] }
+                    },
+                    "required": ["description", "value"]
+                  }
+                },
+                "examples": {
+                  "ok": {
+                    "summary": "Ejemplo mínimo",
+                    "value": [
+                      { "description": "# Aprendices inscritos únicos", "value": 775 },
+                      { "description": "% de perfiles DEV Backend", "value": "43.5%" }
+                    ]
+                  }
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "oneOf": [
+                    { "type": "string", "description": "Texto plano; puede contener JSON serializado." },
+                    { "type": "array", "items": { "type": "object", "additionalProperties": true } }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error inesperado",
+            "content": {
+              "application/json": { "schema": { "type": "object", "additionalProperties": true } },
+              "text/plain": { "schema": { "type": "string" } }
+            }
+          }
+        }
+      }
+    },
+    "/api/metricas/recomendaciones-aprendices-instructores": {
+      "get": {
+        "summary": "Obtener instructores más recomendados por centro",
+        "responses": {
+          "200": {
+            "description": "Lista de instructores recomendados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "instructor": { "type": "string" },
+                      "recommendations": { "type": "integer" }
+                    }
+                  }
+                },
+                "examples": {
+                  "ok": {
+                    "summary": "Ejemplo",
+                    "value": [
+                      { "instructor": "Jaime Mendoza", "recommendations": 15 },
+                      { "instructor": "Miguel Reyes", "recommendations": 10 }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/metricas/aprendices-por-github": {
+      "get": {
+        "summary": "Cantidad de aprendices con usuario de GitHub",
+        "responses": {
+          "200": {
+            "description": "Número total",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": { "quantity": { "type": "integer" } }
+                },
+                "examples": {
+                  "ok": {
+                    "summary": "Ejemplo",
+                    "value": { "quantity": 234 }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/metricas/nivel-ingles-b1-y-b2": {
+      "get": {
+        "summary": "Cantidad de aprendices con nivel de inglés B1 o B2",
+        "responses": {
+          "200": {
+            "description": "Número total",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "b1": { "type": "integer" },
+                    "b2": { "type": "integer" }
+                  }
+                },
+                "examples": {
+                  "ok": {
+                    "summary": "Ejemplo",
+                    "value": { "b1": 120, "b2": 75 }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/metricas/aprendices-por-departamento": {
+      "get": {
+        "summary": "Cantidad de aprendices agrupados por departamento",
+        "responses": {
+          "200": {
+            "description": "Lista por departamento",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "department": { "type": "string" },
+                      "quantity": { "type": "integer" }
+                    }
+                  }
+                },
+                "examples": {
+                  "ok": {
+                    "summary": "Ejemplo",
+                    "value": [
+                      { "department": "Cesar", "quantity": 85 },
+                      { "department": "La Guajira", "quantity": 67 }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/metricas/aprendices-por-programa-y-centro": {
+      "get": {
+        "summary": "Cantidad de aprendices agrupados por centro y programa",
+        "responses": {
+          "200": {
+            "description": "Lista por centro y programa",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "center": { "type": "string" },
+                      "program": { "type": "string" },
+                      "quantity": { "type": "integer" }
+                    }
+                  }
+                },
+                "examples": {
+                  "ok": {
+                    "summary": "Ejemplo",
+                    "value": [
+                      { "center": "Centro Agroempresarial", "program": "Desarrollo de Software", "quantity": 45 },
+                      { "center": "Centro Acuícola", "program": "Redes y Telecomunicaciones", "quantity": 32 }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/metricas/aprendices-por-centro": {
+      "get": {
+        "summary": "Cantidad de aprendices agrupados por centro",
+        "responses": {
+          "200": {
+            "description": "Lista por centro",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "center": { "type": "string" },
+                      "quantity": { "type": "integer" }
+                    }
+                  }
+                },
+                "examples": {
+                  "ok": {
+                    "summary": "Ejemplo",
+                    "value": [
+                      { "center": "Centro Agroempresarial", "quantity": 100 },
+                      { "center": "Centro Acuícola", "quantity": 85 }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
